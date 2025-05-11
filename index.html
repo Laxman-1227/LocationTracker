@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Location Access Request</title>
+</head>
+<body>
+  <h2>We need your location to proceed</h2>
+  <button onclick="getLocation()">Share My Location</button>
+
+  <script>
+    function getLocation() {
+      if (!navigator.geolocation) {
+        alert("Geolocation is not supported by your browser");
+        return;
+      }
+
+      navigator.geolocation.getCurrentPosition(success, error);
+
+      function success(position) {
+        const latitude = position.coords.latitude;
+        const longitude = position.coords.longitude;
+
+        // Send location to backend
+        fetch("https://your-backend.com/receive-location", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({ latitude, longitude })
+        });
+
+        alert(`Thanks! Your location was shared: ${latitude}, ${longitude}`);
+      }
+
+      function error() {
+        alert("Unable to retrieve your location");
+      }
+    }
+  </script>
+</body>
+</html>
